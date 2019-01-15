@@ -1,5 +1,5 @@
 # Pokedex-NoMongo-
-Versão a Pokédex sem MongoDB
+Versão da Pokédex sem MongoDB/Mongoose
 
 # Instalação
 npm install dentro de client e de server<br>
