@@ -1,5 +1,4 @@
 import axios from "axios";
- /*nao faco ideia se ta certo...*/
  
 const config = {
   baseURL: "http://localhost:3001/"
@@ -8,40 +7,38 @@ const config = {
 const api = axios.create(config);
 
 
-export function sendSearchData(input) {
-  return (
-    api.
-      post("/", { params: { input }})
-  )
-}
 export function showPokemon(pokedexInput) {
   return (dispatch) => {
     api
-      .get("/list-of-pokemons/pokemon", { params: { pokedexInput } })
+      .get("/list-of-pokemons/pokedexInput", { params: pokedexInput } )
       .then(response => {
-        console.log(response)
-        dispatch({ type: "SHOW_SPECIFIC", pokedexInput })
+        const foundPokemon = {
+          _id: response.data._id,
+          name: response.data.name,
+          type: response.data.type,
+          photo: response.data.photo,
+          description: response.data.description
+        };
+        console.log(foundPokemon);
+        dispatch({ type: "SHOW_SPECIFIC", foundPokemon });
       })
   };
 };
 
-export function showPokemonList(data) {
+export function showPokemonList() {
   return (dispatch) => {
     api
-      .get("/list-of-pokemons/")
+      .get("/list-of-pokemons")
       .then(response => {
-        console.log(response, "estou vindo do front end");
-        dispatch({ type: "SHOW_LIST", data })
+        const kantoList = response.data.map(pokemon => ({
+          _id: pokemon._id,
+          name: pokemon.name,
+          type: pokemon.type,
+          photo: pokemon.photo,
+          description: pokemon.description
+        }))
+        console.log(kantoList);
+        dispatch({ type: "SHOW_LIST", kantoList })
       });
     };
-};
-
-function getDataFromBackEnd(response){
-  let pokemonShowing = {
-    number: response.data._id,
-    name: response.data.name,
-    photo: response.data.photo,
-    description: response.data.description
-  };
-  return pokemonShowing;
 };

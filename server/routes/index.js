@@ -4,22 +4,30 @@ const pokemons = require("../database/pokemonlist");
 
 const router = express.Router();
 
-const jsonParser = bodyParser.json()
+router.get("/list-of-pokemons/pokedexInput", (req, res) => {
+  const query = req.query.pokemon
+  let foundPokemon = ""
+  if ( query.length <= 3 && query != "Mew" ) {
+    foundPokemon = findPokemonById(query)
+  } else {
+    foundPokemon = findPokemonByKeywords(query)
+  };
+  res.send(foundPokemon)
+});
+
 router.get("/list-of-pokemons", (req, res) => res.send(pokemons));
 
-router.get("/list-of-pokemons/pokemon", jsonParser, (req, res) => {
-  const input = req.body.pokedexInput
-  // const foundPokemon = pokemons.find(
-  //   pokemon => {
-  //     input <= 3 ? pokemon === ( input === pokemons._id ) : pokemon === (input === pokemons.keywords)
-  //   }
-  // )
+function findPokemonById(id) {
+  const foundPokemon = pokemons.find(pokemon => pokemon._id === parseInt(id));
 
-  // if ( !foundPokemon ) {
-  //   return res.status(404).send('Pokémon não encontrado');
-  // };
-  console.log("esse é o req.body: ", req.body)
-  res.send(`o req.body.pokedexInput é ${input}`);
-});
+  return foundPokemon;
+}
+
+function findPokemonByKeywords(keywords) {
+
+  const foundPokemon = pokemons.find(pokemon => pokemon.keywords.includes(keywords));
+
+  return foundPokemon;
+}
 
 module.exports = router;

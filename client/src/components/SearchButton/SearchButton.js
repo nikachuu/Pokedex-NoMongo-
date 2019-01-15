@@ -3,6 +3,7 @@ import "./SearchButton.css";
 
 function SearchButton(props) {
 
+
     let classes = "btn";
 
     if ( props.disabled ) {
@@ -11,8 +12,8 @@ function SearchButton(props) {
 
     return (
         <input
-            className={classes}
             type="submit"
+            className={classes}
             value={props.value}
             disabled={props.disabled}
         />

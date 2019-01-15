@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { showPokemon } from "../../redux/actions";
+import PokemonList from "../PokemonList/PokemonList";
+import Pokemon from "../Pokemon/Pokemon";
 import mainImg from "../../../src/mainimg.jpg";
 import InputField from "../InputField/InputField";
 import SearchButton from "../SearchButton/SearchButton";
@@ -12,6 +14,7 @@ class Pokedex extends Component {
         this.searchRef = React.createRef();
         this.state = {
             disabled: true,
+            pokemonShowing: []
         };
     };
 
@@ -29,7 +32,7 @@ class Pokedex extends Component {
         e.preventDefault();
 
         const typedData = {
-            pokedexInput: this.searchRef.current.getValue()
+            pokemon: this.searchRef.current.getValue()
         };
 
         this.props.showPokemon(typedData);
@@ -40,6 +43,7 @@ class Pokedex extends Component {
             <section className="pokedex">
                 <section className="pokedex--searchwrapper">
                     <form 
+                        formEncType="text/plain"
                         name="pokemon"
                         onSubmit={this.sendData}
                         className="pokedex--search">
@@ -49,14 +53,13 @@ class Pokedex extends Component {
                             ref={this.searchRef}
                             onChange={this.handleChangeButton}
                         />
-                        <SearchButton
-                            disabled={this.state.disabled}
-                            value="Buscar Pokémon"
-                        />
+                        <SearchButton value="Buscar pokémon" disabled={this.state.disabled}/>
                     </form>
-                    <SearchButton
-                        value="Mostrar todos"
-                    />
+
+                    <SearchButton 
+                        value="Mostrar tudo"
+                        formMethod="GET"
+                        formAction="/list-of-pokemons"/>
                     <p>Essa Pokedéx contém os nomes da versão em inglês da franquia.</p>
                 </section>
             </section>
@@ -64,8 +67,8 @@ class Pokedex extends Component {
     }
 }
 
-export default connect(
-    (state) => null,
+export default connect(state =>
+    ({ pokedex: state.pokedex }),
     { showPokemon }
 ) (Pokedex);
 
